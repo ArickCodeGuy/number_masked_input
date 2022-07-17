@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-const props = defineProps({
-  modelValue: Number,
+const props = withDefaults(defineProps<{
+  modelValue: number;
+}>(), {
+  modelValue: 0
 })
+
 function formatNumber(number: number) : string {
   return new Intl.NumberFormat('ru-RU').format(number)
 }
@@ -12,7 +15,7 @@ const value = computed({
   set(v) {
     const number = Number(v.replace(/\D/g, '')) || 0 // Может быть NaN
     // Применяем маску даже если number не поменялось
-    inputEl ? inputEl.value.value = formatNumber(number) : false
+    inputEl.value ? inputEl.value.value = formatNumber(number) : false
     if (number !== props.modelValue) {
       emit('update:modelValue', number)
     }
